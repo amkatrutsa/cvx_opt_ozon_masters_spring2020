@@ -1,0 +1,243 @@
+\documentclass{beamer}
+\mode<presentation>
+{\usetheme{default}
+ \usecolortheme{default}
+ \usefonttheme{default}
+ \setbeamertemplate{navigation symbols}{}
+ \setbeamertemplate{caption}[numbered]} 
+\usepackage[russian]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{amsmath,amssymb}
+\usepackage{url,hyperref}
+\hypersetup{colorlinks,linkcolor=,urlcolor=blue}
+\newtheorem{Th}{Теорема}
+\newtheorem{ru_def}{Определение}
+\newcommand{\tr}{\mathrm{trace}}
+\usefonttheme[onlymath]{serif}
+\newcommand{\Q}{{\color{red}{\textbf{Q}}}}
+
+\newcounter{saveenumi}
+\newcommand{\seti}{\setcounter{saveenumi}{\value{enumi}}}
+\newcommand{\conti}{\setcounter{enumi}{\value{saveenumi}}}
+
+\resetcounteronoverlays{saveenumi}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formatting for title page
+\addtobeamertemplate{navigation symbols}{}{    \usebeamerfont{footline}%
+    \insertframenumber \ /  \inserttotalframenumber }
+    
+\newcommand{\bx}{\mathbf{x}}
+\newcommand{\by}{\mathbf{y}}
+\newcommand{\bc}{\mathbf{c}}
+\newcommand{\ba}{\mathbf{a}}
+\newcommand{\bA}{\mathbf{A}}
+\newcommand{\bX}{\mathbf{X}}
+\newcommand{\bU}{\mathbf{U}}
+\newcommand{\bV}{\mathbf{V}}
+\newcommand{\bSigma}{\boldsymbol{\Sigma}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\T}{\top}
+\newcommand{\diag}[1]{\mathrm{diag}(#1)}
+\DeclareMathOperator*{\argmin}{\arg\min}
+    
+    
+\title[Семинар 1]{Оптимизация I\\ 
+Семинар 1: Постановки задач оптимизации}
+\author{Александр Катруца}
+\institute{
+\vspace{-0.5cm}
+\begin{figure}
+\centering
+\includegraphics[scale=0.3]{../pics/logo}
+\end{figure}
+%\vspace{-1cm}
+}
+\date{10 февраля 2020 г.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Методология}
+Основные этапы использования методов оптимизации при решении реальных задач:
+\begin{enumerate}[<+->]
+\item Определение целевой функции
+\item Определение допустимого множества решений
+\item Постановка и анализ оптимизационной задачи
+\item Выбор наилучшего алгоритма для решения поставленной задачи
+\item Реализация алгоритма и проверка его корректности
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Безусловная задача оптимизации}
+
+Дана функция $f: \bbR^n \to \bbR$
+
+\begin{equation*}
+\min_{\bx \in \bbR^n} f(\bx)
+\end{equation*}
+
+\begin{itemize}
+\item Простейший тип задач
+\item Но даже такие задачи не всегда легко решить
+\item Начнём далее именно с анализа задач безусловной оптимизации
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Регрессия}
+Дан набор пар $(\bx_i, y_i)$, необходимо восстановить функцию $f: \bbR^n \to \bbR$ так чтобы $y_i \approx f(\bx_i)$.
+\pause
+\begin{itemize}
+\item Что надо дополнительно задать? (Вспомните курс по машинному обучению)
+\pause
+\item Примеры
+\pause
+\item Свойства
+\end{itemize}
+\pause
+\Q: что делать, если значения $\bx_i$ даны неточно? 
+\end{frame}
+
+\begin{frame}{Оценка параметров распределений}
+Даны некоторые векторы $\bx_1,\ldots, \bx_k$.
+Надо найти из какого распределения они взяты.
+
+\pause
+
+\begin{center}
+Основной метод: метод максимального правдоподобия
+\end{center}
+
+\pause
+
+\begin{itemize}[<+->]
+\item Как параметризовать распределение?
+\item Что такое правдоподобие?
+\item Пример для нормального распределения
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Условная задача оптимизации}
+
+\begin{equation*}
+\begin{split}
+& \min f(\bx)\\
+\text{s.t. } & \bx \in \mathcal{D}
+\end{split}
+\end{equation*}
+
+\begin{itemize}
+\item Дискретные задачи, например $\mathcal{D} = \{ 0, 1 \}^n$ или $\mathcal{D} = \{ -1, 1 \}^n$
+\item Непрерывные задачи
+\begin{equation*}
+\mathcal{D} = \{ \bx \mid f_i(\bx) = 0, \; g_k(\bx) \leq 0 \}
+\end{equation*}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Регрессия по неполным данным}
+Дан набор данных $(\bx_i, y_i)$, $y_i \in \mathbb{R}$.
+Однако теперь известно, что только первые $m$ измерений дали точное значение $y_i$.
+Про остальные известна лишь оценка снизу.
+Необходимо найти модель, по которой можно восстановить имеющиеся данные и учесть данные оценки на отсутствующие.
+\pause
+\begin{itemize}[<+->]
+\item Какие переменные надо ввести?
+\item Какая целевая функция?
+\item Какие ограничения?
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Toy metric learning}
+
+Дан набор данных $(\bx_i, y_i)$, где $y_i$~--- класс объекта $\bx_i$
+Надо получить псевдометрику такую, что объекты одного класса окажутся ближе, чем объекты разных классов.
+
+\pause
+\begin{itemize}[<+->]
+\item Какая параметризация?
+\item Какая целевая функция?
+\item Какие ограничения?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Задача про склад}
+Есть список складов и список магазинов. 
+Надо организовать доставку товаров из складов так, чтобы все запросы магазинов были удовлетворены.
+Как это сделать?
+
+\begin{itemize}[<+->]
+\item Что нам дано?
+\item Что надо найти?
+\item Какая целевая функция?
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Определение расписания процессора}
+\begin{enumerate}
+\item Задан пул задач, необходимое время старта и окончания, а также объём работы необходимой для решения каждой задачи
+\item Даны ограничения на скорость процессора и границы её изменения между соседними моментами времени
+\item Надо составить расписание выполнения задач так, чтобы потребляемая мощность была минимальна
+\end{enumerate}
+
+\pause
+
+\begin{itemize}[<+->]
+\item Что дано?
+\item Как задать расписание?
+\item Как задать целевую функцию?
+\item Какие ограничения?
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Лучевая терапия}
+Распределить интенсивность облучения участка ткани так, чтобы максимизировать поражения заданной области и минимизировать поражение остальных клеток.
+
+\pause
+
+\begin{itemize}[<+->]
+\item Какие переменные даны, а какие являются решением?
+\item Какие есть ограничения?
+\item Какая целевая функция?
+\end{itemize}
+\end{frame}
+
+%\begin{frame}{Generative adversarial networks}
+%Как сделать из случайной матрицы изображение похожее на реальное?
+%
+%\pause
+%
+%\begin{itemize}[<+->]
+%\item Как отделить реальное изображение от сгенерированного?
+%\item Как сгенерировать изображение из случайной матрицы?
+%\item Какая связь между генерацией и дискриминацией? 
+%\end{itemize}
+%
+%\end{frame}
+
+\begin{frame}{Выводы}
+\begin{itemize}
+\item Типы задач оптимизации
+\item Шаги для формализации задачи
+\item Неоднозначность формализации
+\end{itemize}
+\end{frame}
+
+\end{document}
+
+5.13
+7.13
+7.22
